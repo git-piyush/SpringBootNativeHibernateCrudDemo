@@ -11,6 +11,7 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.springboot.demo.EmployeeModelResponse.EmployeeModelResponse;
 import com.springboot.demo.entity.Employee;
 
 @Repository
@@ -41,13 +42,15 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		return employeeList;
 	}
 	@Override
-	@Transactional
-	public Employee findEmployeeById(int employeeId) {
+	public EmployeeModelResponse findEmployeeById(int employeeId) {
+		EmployeeModelResponse employee = new EmployeeModelResponse();
 		
 		Session currentSession = entityManager.unwrap(Session.class);
 		
-		Employee employee = currentSession.get(Employee.class, employeeId);
+		Employee employee1 = currentSession.get(Employee.class, employeeId);
 		
+		employee.setEmployeeRes(employee1);
 		return employee;
 	}
+	
 }

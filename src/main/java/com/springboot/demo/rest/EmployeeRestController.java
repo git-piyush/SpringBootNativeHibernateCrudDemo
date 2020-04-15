@@ -10,15 +10,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.springboot.demo.EmployeeModelResponse.EmployeeModelResponse;
 import com.springboot.demo.dao.EmployeeDao;
 import com.springboot.demo.entity.Employee;
 import com.springboot.demo.modelrequest.EmployeeModelRequest;
+import com.springboot.demo.validation.EmployeeValidation;
 
 @RestController
 @RequestMapping("/")
 public class EmployeeRestController {
 
 	private EmployeeDao employeeDao;
+	
+	
 
 	//inject employee dao
 	@Autowired
@@ -33,9 +37,23 @@ public class EmployeeRestController {
 	}
 	
 	@GetMapping("/getemployeebyid")
-	public Employee findEmployeeById(@Valid @RequestBody EmployeeModelRequest modelRequest){
-		Employee employee = employeeDao.findEmployeeById(modelRequest.getEmployeeId());
-		return employee;
+	public EmployeeModelResponse findEmployeeById(@Valid @RequestBody EmployeeModelRequest modelRequest){
+		EmployeeValidation employeeValidation = new EmployeeValidation();
+		EmployeeModelResponse response = new EmployeeModelResponse();
+		boolean getEmployee = employeeValidation.validateInput(modelRequest.getEmployeeId());
+		
+		if(getEmployee) {
+			response = employeeDao.findEmployeeById(modelRequest.getEmployeeId());
+			if(response.getEmployeeRes()==null) {
+				response.setErrorMsg("Result Not found.");
+				return response;
+			}
+			response.setErrorMsg("Sucess");
+			return response;
+		}
+		response.setErrorMsg("Fail");
+		return response;
+		
 	}
 	
 	
