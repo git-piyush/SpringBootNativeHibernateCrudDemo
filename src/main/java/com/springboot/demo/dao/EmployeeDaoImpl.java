@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -24,7 +25,6 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		super();
 		this.entityManager = entityManager;
 	}
-
 	@Override
 	@Transactional
 	public List<Employee> findAll() {
@@ -39,5 +39,15 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		
 		//return result
 		return employeeList;
+	}
+	@Override
+	@Transactional
+	public Employee findEmployeeById(int employeeId) {
+		
+		Session currentSession = entityManager.unwrap(Session.class);
+		
+		Employee employee = currentSession.get(Employee.class, employeeId);
+		
+		return employee;
 	}
 }

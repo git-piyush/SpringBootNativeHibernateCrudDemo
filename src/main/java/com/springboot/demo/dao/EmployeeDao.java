@@ -7,4 +7,6 @@ import com.springboot.demo.entity.Employee;
 public interface EmployeeDao {
 
 	public List<Employee> findAll();
+	
+	public Employee findEmployeeById(int employeeId);
 }
