@@ -4,10 +4,13 @@ import java.util.List;
 
 import com.springboot.demo.EmployeeModelResponse.EmployeeModelResponse;
 import com.springboot.demo.entity.Employee;
+import com.springboot.demo.modelrequest.EmployeeModelRequest;
 
 public interface EmployeeDao {
 
 	public List<Employee> findAll();
 	
 	public EmployeeModelResponse findEmployeeById(int employeeId);
+	
+	public EmployeeModelResponse findEmployeeByAddress(EmployeeModelRequest modelRequest);
 }
