@@ -62,4 +62,17 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		return employeels;
 	}
 	
+	@Override
+	@Transactional
+	public void createEmployee(EmployeeModelRequest modelRequest) {
+		Employee emp = new Employee();
+		emp.setFirstName(modelRequest.getFirstName());
+		emp.setLastName(modelRequest.getLastName());
+		emp.setEmail(modelRequest.getEmail());
+		
+		Session currentSession = entityManager.unwrap(Session.class);
+		int theId = (int)currentSession.save(emp);
+		
+	}
+	
 }

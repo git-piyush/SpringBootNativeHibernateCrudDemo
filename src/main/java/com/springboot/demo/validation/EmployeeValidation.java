@@ -1,5 +1,7 @@
 package com.springboot.demo.validation;
 
+import javax.validation.Valid;
+
 import com.springboot.demo.modelrequest.EmployeeModelRequest;
 
 public class EmployeeValidation {
@@ -29,5 +31,10 @@ public class EmployeeValidation {
 		
 		
 		return true;
+	}
+
+	public boolean createAddrVal(@Valid EmployeeModelRequest modelRequest) {
+		
+		return false;
 	}
 }
