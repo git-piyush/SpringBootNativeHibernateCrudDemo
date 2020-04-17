@@ -41,7 +41,7 @@ public class EmployeeRestController {
 	public EmployeeModelResponse findEmployeeById(@Valid @RequestBody EmployeeModelRequest modelRequest){
 		EmployeeValidation employeeValidation = new EmployeeValidation();
 		EmployeeModelResponse response = new EmployeeModelResponse();
-		boolean getEmployee = employeeValidation.validateInput(modelRequest.getEmployeeId());
+		boolean getEmployee = employeeValidation.validateIdInput(modelRequest.getEmployeeId());
 		
 		if(getEmployee) {
 			response = employeeDao.findEmployeeById(modelRequest.getEmployeeId());
@@ -59,11 +59,20 @@ public class EmployeeRestController {
 	
 	@GetMapping("/getemployeebyaddr")
 	public EmployeeModelResponse findEmployeeByAddr(@Valid @RequestBody EmployeeModelRequest modelRequest) {
-		//EmployeeModelResponse response = new EmployeeModelResponse();
-		 EmployeeModelResponse employeeList = employeeDao.findEmployeeByAddress(modelRequest);
-		 return employeeList;
-		
-		
+		EmployeeValidation employeeValidation = new EmployeeValidation();
+		EmployeeModelResponse response = new EmployeeModelResponse();
+		boolean getEmployeeList = employeeValidation.validateAddrInput(modelRequest);
+		if(getEmployeeList) {
+			 response = employeeDao.findEmployeeByAddress(modelRequest);
+			 if(response.getEmpList()==null || response.getEmpList().isEmpty()) {
+				 response.setErrorMsg("Result Not Found");
+				 return response;
+			 }
+			 response.setErrorMsg("Sucess");
+			 return response;
+		}
+		response.setErrorMsg("Input Required");
+		return response;
 	}
 	
 }
