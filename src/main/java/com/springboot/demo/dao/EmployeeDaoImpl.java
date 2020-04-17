@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 import com.springboot.demo.EmployeeModelResponse.EmployeeModelResponse;
 import com.springboot.demo.entity.Employee;
 import com.springboot.demo.modelrequest.EmployeeModelRequest;
+import com.springboot.demo.rest.EmployeeRestController;
 
 @Repository
 public class EmployeeDaoImpl implements EmployeeDao {
@@ -51,28 +52,30 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	@Override
 	@Transactional
 	public EmployeeModelResponse findEmployeeByAddress(EmployeeModelRequest modelRequest) {
-		EmployeeModelResponse employeels = new EmployeeModelResponse();
+		EmployeeModelResponse modelResponse = new EmployeeModelResponse();
 		Session currentSession = entityManager.unwrap(Session.class);
 		Query<Employee> query = currentSession.createQuery("from Employee e where e.firstName = :fName or e.lastName = :lName or e.email = :email",Employee.class);
 		query.setParameter("fName", modelRequest.getFirstName());
 		query.setParameter("lName", modelRequest.getLastName());
 		query.setParameter("email", modelRequest.getEmail());
 		List<Employee> employeeList = query.getResultList();
-		employeels.setEmpList(employeeList);
-		return employeels;
+		modelResponse.setEmpList(employeeList);
+		return modelResponse;
 	}
 	
 	@Override
 	@Transactional
-	public void createEmployee(EmployeeModelRequest modelRequest) {
+	public EmployeeModelResponse createEmployee(EmployeeModelRequest modelRequest) {
+		EmployeeModelResponse modelResponse = new EmployeeModelResponse();
 		Employee emp = new Employee();
 		emp.setFirstName(modelRequest.getFirstName());
 		emp.setLastName(modelRequest.getLastName());
-		emp.setEmail(modelRequest.getEmail());
-		
+		emp.setEmail(modelRequest.getEmail());		
 		Session currentSession = entityManager.unwrap(Session.class);
 		int theId = (int)currentSession.save(emp);
-		
+		Employee employee = currentSession.get(Employee.class, theId);
+		modelResponse.setEmployeeRes(employee);
+		return modelResponse;
 	}
 	
 }

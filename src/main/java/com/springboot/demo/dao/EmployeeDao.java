@@ -16,5 +16,5 @@ public interface EmployeeDao {
 	
 	public EmployeeModelResponse findEmployeeByAddress(EmployeeModelRequest modelRequest);
 
-	public void createEmployee(EmployeeModelRequest modelRequest);
+	public EmployeeModelResponse createEmployee(EmployeeModelRequest modelRequest);
 }

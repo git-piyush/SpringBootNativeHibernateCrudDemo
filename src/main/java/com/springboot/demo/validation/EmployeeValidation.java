@@ -2,6 +2,7 @@ package com.springboot.demo.validation;
 
 import javax.validation.Valid;
 
+import com.springboot.demo.EmployeeModelResponse.EmployeeModelResponse;
 import com.springboot.demo.modelrequest.EmployeeModelRequest;
 
 public class EmployeeValidation {
@@ -11,7 +12,7 @@ public class EmployeeValidation {
 		// TODO Auto-generated constructor stub
 	}
 
-	public boolean validateIdInput(int theId) {  
+	public boolean RetrieveIdInput(int theId) {  
 		String employeeId=String.valueOf(theId); 
 		
 		if(theId>0) {
@@ -22,10 +23,10 @@ public class EmployeeValidation {
 		return false;
 	}
 
-	public boolean validateAddrInput(EmployeeModelRequest modelRequest) {
-		if((null==modelRequest.getFirstName() || "".endsWith(modelRequest.getFirstName())) && 
-				(null==modelRequest.getLastName() || "".endsWith(modelRequest.getLastName()))
-					&& (null==modelRequest.getEmail() || "".endsWith(modelRequest.getEmail()))) {
+	public boolean RetrieveAddrInput(EmployeeModelRequest modelRequest) {
+		if((null==modelRequest.getFirstName() || "".equals(modelRequest.getFirstName())) && 
+				(null==modelRequest.getLastName() || "".equals(modelRequest.getLastName()))
+					&& (null==modelRequest.getEmail() || "".equals(modelRequest.getEmail()))) {
 			return false;
 		}
 		
@@ -33,8 +34,20 @@ public class EmployeeValidation {
 		return true;
 	}
 
-	public boolean createAddrVal(@Valid EmployeeModelRequest modelRequest) {
-		
-		return false;
+	public EmployeeModelResponse createEmployeeAddrVal(@Valid EmployeeModelRequest modelRequest) {
+		EmployeeModelResponse modelResponse = new EmployeeModelResponse();
+		if(null == modelRequest.getFirstName() || "".equals(modelRequest.getFirstName())) {
+			modelResponse.setErrorMsg("Invalid Request");
+			return modelResponse;
+		}
+		if(null == modelRequest.getLastName() || "".equals(modelRequest.getLastName())) {
+			modelResponse.setErrorMsg("Invalid Request");
+			return modelResponse;
+		}
+		if(null == modelRequest.getEmail() || "".equals(modelRequest.getEmail())) {
+			modelResponse.setErrorMsg("Invalid Request");
+			return modelResponse;
+		}
+		return modelResponse;
 	}
 }

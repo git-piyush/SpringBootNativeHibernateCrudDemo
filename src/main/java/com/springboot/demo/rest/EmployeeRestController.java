@@ -42,7 +42,7 @@ public class EmployeeRestController {
 	public EmployeeModelResponse findEmployeeById(@Valid @RequestBody EmployeeModelRequest modelRequest){
 		EmployeeValidation employeeValidation = new EmployeeValidation();
 		EmployeeModelResponse response = new EmployeeModelResponse();
-		boolean getEmployee = employeeValidation.validateIdInput(modelRequest.getEmployeeId());
+		boolean getEmployee = employeeValidation.RetrieveIdInput(modelRequest.getEmployeeId());
 		
 		if(getEmployee) {
 			response = employeeDao.findEmployeeById(modelRequest.getEmployeeId());
@@ -61,29 +61,33 @@ public class EmployeeRestController {
 	@GetMapping("/getemployeebyaddr")
 	public EmployeeModelResponse findEmployeeByAddr(@Valid @RequestBody EmployeeModelRequest modelRequest) {
 		EmployeeValidation employeeValidation = new EmployeeValidation();
-		EmployeeModelResponse response = new EmployeeModelResponse();
-		boolean getEmployeeList = employeeValidation.validateAddrInput(modelRequest);
+		EmployeeModelResponse modelResponse = new EmployeeModelResponse();
+		boolean getEmployeeList = employeeValidation.RetrieveAddrInput(modelRequest);
 		if(getEmployeeList) {
-			 response = employeeDao.findEmployeeByAddress(modelRequest);
-			 if(response.getEmpList()==null || response.getEmpList().isEmpty()) {
-				 response.setErrorMsg("Result Not Found");
-				 return response;
+			modelResponse = employeeDao.findEmployeeByAddress(modelRequest);
+			 if(modelResponse.getEmpList()==null || modelResponse.getEmpList().isEmpty()) {
+				 modelResponse.setErrorMsg("Result Not Found");
+				 return modelResponse;
 			 }
-			 response.setErrorMsg("Sucess");
-			 return response;
+			 modelResponse.setErrorMsg("Sucess");
+			 return modelResponse;
 		}
-		response.setErrorMsg("Input Required");
-		return response;
+		modelResponse.setErrorMsg("Input Required");
+		return modelResponse;
 	}
 	
 	@PostMapping("/createemployee")
-	public void createEmployee(@Valid @RequestBody EmployeeModelRequest modelRequest) {
-		//EmployeeValidation employeeValidation = new EmployeeValidation();
-		//boolean creayeEmployee = employeeValidation.createAddrVal(modelRequest);
-		
-		if(true) {
-			employeeDao.createEmployee(modelRequest);
+	public EmployeeModelResponse createEmployee(@Valid @RequestBody EmployeeModelRequest modelRequest) {
+		EmployeeModelResponse modelResponse = null;
+		EmployeeValidation employeeValidation = new EmployeeValidation();
+		modelResponse = employeeValidation.createEmployeeAddrVal(modelRequest);
+		if(modelResponse.getErrorMsg()==null) {
+			modelResponse = employeeDao.createEmployee(modelRequest);
+			modelResponse.setErrorMsg("Sucess");
+			return modelResponse;
 		}
+		
+		return modelResponse;
 	}
 	
 	
