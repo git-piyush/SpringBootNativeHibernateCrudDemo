@@ -12,7 +12,7 @@ public class EmployeeValidation {
 		// TODO Auto-generated constructor stub
 	}
 
-	public boolean RetrieveIdInput(int theId) {  
+	public boolean RetrieveIdInputVal(int theId) {  
 		String employeeId=String.valueOf(theId); 
 		
 		if(theId>0) {
@@ -23,7 +23,7 @@ public class EmployeeValidation {
 		return false;
 	}
 
-	public boolean RetrieveAddrInput(EmployeeModelRequest modelRequest) {
+	public boolean RetrieveAddrInputVal(EmployeeModelRequest modelRequest) {
 		if((null==modelRequest.getFirstName() || "".equals(modelRequest.getFirstName())) && 
 				(null==modelRequest.getLastName() || "".equals(modelRequest.getLastName()))
 					&& (null==modelRequest.getEmail() || "".equals(modelRequest.getEmail()))) {
@@ -49,5 +49,17 @@ public class EmployeeValidation {
 			return modelResponse;
 		}
 		return modelResponse;
+	}
+
+	public boolean deleteEmployeeIdVal(@Valid EmployeeModelRequest modelRequest) {
+		
+		String employeeId=String.valueOf(modelRequest.getEmployeeId()); 
+		
+		if(modelRequest.getEmployeeId()>0) {
+			if(null != employeeId) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

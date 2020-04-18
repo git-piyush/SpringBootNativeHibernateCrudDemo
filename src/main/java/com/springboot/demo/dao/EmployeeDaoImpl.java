@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -77,5 +78,25 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		modelResponse.setEmployeeRes(employee);
 		return modelResponse;
 	}
+	@Override
+	@Transactional
+	public EmployeeModelResponse deleteEmployee(int employeeId) {
+		EmployeeModelResponse modelResponse = new EmployeeModelResponse();
+		Session currentSession = entityManager.unwrap(Session.class);
+		Employee emp = currentSession.get(Employee.class, employeeId);
+		
+		try {
+			currentSession.delete(emp);
+			modelResponse.setEmployeeRes(emp);
+			modelResponse.setErrorMsg("Below Employee removed sucessfully.");
+			return modelResponse;
+		} catch (Exception e) {
+			modelResponse.setErrorMsg("Deletion Failed");
+			return modelResponse;
+		}
+		
+	}
+	
+	
 	
 }

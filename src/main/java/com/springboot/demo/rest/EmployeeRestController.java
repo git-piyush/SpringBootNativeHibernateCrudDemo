@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,7 +43,7 @@ public class EmployeeRestController {
 	public EmployeeModelResponse findEmployeeById(@Valid @RequestBody EmployeeModelRequest modelRequest){
 		EmployeeValidation employeeValidation = new EmployeeValidation();
 		EmployeeModelResponse response = new EmployeeModelResponse();
-		boolean getEmployee = employeeValidation.RetrieveIdInput(modelRequest.getEmployeeId());
+		boolean getEmployee = employeeValidation.RetrieveIdInputVal(modelRequest.getEmployeeId());
 		
 		if(getEmployee) {
 			response = employeeDao.findEmployeeById(modelRequest.getEmployeeId());
@@ -62,7 +63,7 @@ public class EmployeeRestController {
 	public EmployeeModelResponse findEmployeeByAddr(@Valid @RequestBody EmployeeModelRequest modelRequest) {
 		EmployeeValidation employeeValidation = new EmployeeValidation();
 		EmployeeModelResponse modelResponse = new EmployeeModelResponse();
-		boolean getEmployeeList = employeeValidation.RetrieveAddrInput(modelRequest);
+		boolean getEmployeeList = employeeValidation.RetrieveAddrInputVal(modelRequest);
 		if(getEmployeeList) {
 			modelResponse = employeeDao.findEmployeeByAddress(modelRequest);
 			 if(modelResponse.getEmpList()==null || modelResponse.getEmpList().isEmpty()) {
@@ -86,12 +87,20 @@ public class EmployeeRestController {
 			modelResponse.setErrorMsg("Sucess");
 			return modelResponse;
 		}
-		
 		return modelResponse;
 	}
 	
-	
-	
+	@DeleteMapping("/deleteemployee")
+	public EmployeeModelResponse deleteEmployeeById(@Valid @RequestBody EmployeeModelRequest modelRequest) {
+		EmployeeModelResponse employeeDeleted = null;
+		EmployeeValidation employeeValidation = new EmployeeValidation();
+		boolean deleteEmployee = employeeValidation.deleteEmployeeIdVal(modelRequest);
+		if(deleteEmployee) {
+			employeeDeleted = employeeDao.deleteEmployee(modelRequest.getEmployeeId());
+			return employeeDeleted;
+		}
+		return employeeDeleted;
+	}
 	
 	
 	
