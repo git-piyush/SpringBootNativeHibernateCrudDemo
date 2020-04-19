@@ -1,0 +1,55 @@
+
+//Create a employee
+http://localhost:8080/createemployee
+{
+	"firstName" : "Sonu",
+	"lastName"	: "Kumar",
+	"email"		: "Sonu@gmail.com"
+}
+
+//Get employee by employeeid
+http://localhost:8080/getemployeebyid
+{
+	
+"employeeId" :"3"
+
+}
+
+//Get all employee
+http://localhost:8080/getall
+
+//Get Employee by address
+http://localhost:8080/getemployeebyaddr
+{
+    
+"firstName": "Leslie",
+    
+"lastName": null,
+   
+ "email": ""
+
+}
+
+//Update employee details
+http://localhost:8080/updateemployeebyid
+{
+	
+"employeeId" : "6",
+	
+"newFirstName" : "Yuvraj",
+	
+"newLastName" : "Singh",
+	
+"newEmail" : "Yuvraj@luv2code.com",
+	
+"update":"N"
+
+}
+
+//delete employee by employeeid
+http://localhost:8080/deleteemployee
+{
+	
+"employeeId" : 5
+
+}
