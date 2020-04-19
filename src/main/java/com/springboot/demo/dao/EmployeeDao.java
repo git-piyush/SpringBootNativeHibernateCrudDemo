@@ -20,4 +20,6 @@ public interface EmployeeDao {
 	
 	 public EmployeeModelResponse deleteEmployee(int employeeId);
 
+	public boolean updateEmployee(@Valid EmployeeModelRequest modelRequest);
+
 }

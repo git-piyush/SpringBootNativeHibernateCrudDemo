@@ -96,6 +96,18 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		}
 		
 	}
+	@Override
+	@Transactional
+	public boolean updateEmployee(@Valid EmployeeModelRequest modelRequest) {
+		Session currentSession = entityManager.unwrap(Session.class);
+		EmployeeModelResponse modelResponse = null;
+		Query<Employee> query = currentSession.createQuery("update Employee e set e.firstName='"+modelRequest.getNewFirstName()+"' , e.lastName='"+modelRequest.getNewLastName()+"' , e.email='"+modelRequest.getNewEmail()+"' where e.id='"+modelRequest.getEmployeeId()+"'");    
+		int theId = query.executeUpdate();
+		if(theId>0) {
+			return true;
+		}
+		return false;
+	}
 	
 	
 	

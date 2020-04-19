@@ -4,11 +4,14 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.apache.tomcat.util.modeler.modules.ModelerSource;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,7 +46,7 @@ public class EmployeeRestController {
 	public EmployeeModelResponse findEmployeeById(@Valid @RequestBody EmployeeModelRequest modelRequest){
 		EmployeeValidation employeeValidation = new EmployeeValidation();
 		EmployeeModelResponse response = new EmployeeModelResponse();
-		boolean getEmployee = employeeValidation.RetrieveIdInputVal(modelRequest.getEmployeeId());
+		boolean getEmployee = employeeValidation.IdInputVal(modelRequest.getEmployeeId());
 		
 		if(getEmployee) {
 			response = employeeDao.findEmployeeById(modelRequest.getEmployeeId());
@@ -102,15 +105,35 @@ public class EmployeeRestController {
 		return employeeDeleted;
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	@PutMapping("/updateemployeebyid")
+	public EmployeeModelResponse updateEmployeeById(@Valid @RequestBody EmployeeModelRequest modelRequest) {
+		EmployeeModelResponse modelResponse = new EmployeeModelResponse();
+		EmployeeValidation employeeValidation = new EmployeeValidation();
+		boolean updateEmployee = employeeValidation.IdInputVal(modelRequest.getEmployeeId());
+		if(updateEmployee) {
+			modelResponse = employeeDao.findEmployeeById(modelRequest.getEmployeeId());
+			if(modelRequest.getUpdate().equalsIgnoreCase("Y")) {
+				if(!(modelRequest.getNewFirstName().equals(modelResponse.getEmployeeRes().getFirstName())) ||
+						!(modelRequest.getNewLastName().equals(modelResponse.getEmployeeRes().getLastName())) || 
+							!(modelRequest.getNewEmail().equals(modelResponse.getEmployeeRes().getEmail()))) {
+					
+					boolean empUpdated = employeeDao.updateEmployee(modelRequest);
+					if(empUpdated) {
+						modelResponse = employeeDao.findEmployeeById(modelRequest.getEmployeeId());
+						modelResponse.setErrorMsg("Employee Update To :");
+						return modelResponse;
+					}
+					modelResponse.setErrorMsg("Result Not Found");
+					return modelResponse;
+				}
+				modelResponse.setErrorMsg("Current employee and Updated Employee have the same values");
+				return modelResponse;
+			}
+			modelResponse.setErrorMsg("To Update below record make update field Y.");
+			return modelResponse;
+		}
+		modelResponse.setErrorMsg("Id is mandatory field to update a employee.");
+		return modelResponse;
+	}
 	
 }

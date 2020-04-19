@@ -11,6 +11,10 @@ public class EmployeeModelRequest {
 	private String firstName;
 	private String lastName;
 	private String email;
+	private String newFirstName;
+	private String newLastName;
+	private String newEmail;
+	private String update;
 
 	public int getEmployeeId() {
 		return employeeId;
@@ -43,6 +47,37 @@ public class EmployeeModelRequest {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
+
+	public String getNewFirstName() {
+		return newFirstName;
+	}
+
+	public void setNewFirstName(String newFirstName) {
+		this.newFirstName = newFirstName;
+	}
+
+	public String getNewLastName() {
+		return newLastName;
+	}
+
+	public void setNewLastName(String newLastName) {
+		this.newLastName = newLastName;
+	}
+
+	public String getNewEmail() {
+		return newEmail;
+	}
+
+	public void setNewEmail(String newEmail) {
+		this.newEmail = newEmail;
+	}
+
+	public String getUpdate() {
+		return update;
+	}
+
+	public void setUpdate(String update) {
+		this.update = update;
+	}
 	
 }

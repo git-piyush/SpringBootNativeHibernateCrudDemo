@@ -12,7 +12,7 @@ public class EmployeeValidation {
 		// TODO Auto-generated constructor stub
 	}
 
-	public boolean RetrieveIdInputVal(int theId) {  
+	public boolean IdInputVal(int theId) {  
 		String employeeId=String.valueOf(theId); 
 		
 		if(theId>0) {
