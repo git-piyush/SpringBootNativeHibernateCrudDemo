@@ -37,9 +37,9 @@ public class EmployeeRestController {
 		this.employeeDao = employeeDao;
 	}
 	@GetMapping("/getall")
-	public List<Employee> findAll() {
-		List<Employee> employeeList = employeeDao.findAll();
-		return employeeList;
+	public EmployeeModelResponse findAll() {
+		EmployeeModelResponse modelResponse = employeeDao.findAll();
+		return modelResponse;
 	}
 	
 	@GetMapping("/getemployeebyid")

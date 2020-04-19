@@ -31,15 +31,18 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	}
 	@Override
 	@Transactional
-	public List<Employee> findAll() {
+	public EmployeeModelResponse findAll() {
+		EmployeeModelResponse modelResponse = new EmployeeModelResponse();
 		//get the current session
 		Session currentSession = entityManager.unwrap(Session.class);
 		//create a query
-		Query<Employee> query = currentSession.createQuery("from Employee", Employee.class);
+		Query query = currentSession.createQuery("from Employee");
 		//execute query and get result
 		List<Employee> employeeList = query.getResultList();
+		
+		modelResponse.setEmpList(employeeList);
 		//return result
-		return employeeList;
+		return modelResponse;
 	}
 	@Override
 	@Transactional
@@ -55,7 +58,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	public EmployeeModelResponse findEmployeeByAddress(EmployeeModelRequest modelRequest) {
 		EmployeeModelResponse modelResponse = new EmployeeModelResponse();
 		Session currentSession = entityManager.unwrap(Session.class);
-		Query<Employee> query = currentSession.createQuery("from Employee e where e.firstName = :fName or e.lastName = :lName or e.email = :email",Employee.class);
+		Query query = currentSession.createQuery("from Employee e where e.firstName = :fName and e.lastName = :lName and e.email = :email");
 		query.setParameter("fName", modelRequest.getFirstName());
 		query.setParameter("lName", modelRequest.getLastName());
 		query.setParameter("email", modelRequest.getEmail());
@@ -101,14 +104,12 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	public boolean updateEmployee(@Valid EmployeeModelRequest modelRequest) {
 		Session currentSession = entityManager.unwrap(Session.class);
 		EmployeeModelResponse modelResponse = null;
-		Query<Employee> query = currentSession.createQuery("update Employee e set e.firstName='"+modelRequest.getNewFirstName()+"' , e.lastName='"+modelRequest.getNewLastName()+"' , e.email='"+modelRequest.getNewEmail()+"' where e.id='"+modelRequest.getEmployeeId()+"'");    
+		Query query = currentSession.createQuery("update Employee e set e.firstName='"+modelRequest.getNewFirstName()+"' , e.lastName='"+modelRequest.getNewLastName()+"' , e.email='"+modelRequest.getNewEmail()+"' where e.id='"+modelRequest.getEmployeeId()+"'");    
 		int theId = query.executeUpdate();
 		if(theId>0) {
 			return true;
 		}
 		return false;
-	}
-	
-	
+	}	
 	
 }

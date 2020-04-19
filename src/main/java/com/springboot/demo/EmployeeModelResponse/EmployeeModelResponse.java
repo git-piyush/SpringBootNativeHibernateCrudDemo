@@ -7,8 +7,8 @@ import com.springboot.demo.entity.Employee;
 public class EmployeeModelResponse {
 	private String errorMsg;
 	private Employee employeeRes;
-	//private Employee employeeAddr;
 	private List<Employee> empList;
+	
 	public EmployeeModelResponse() {
 		super();
 		// TODO Auto-generated constructor stub

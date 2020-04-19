@@ -10,7 +10,7 @@ import com.springboot.demo.modelrequest.EmployeeModelRequest;
 
 public interface EmployeeDao {
 
-	public List<Employee> findAll();
+	public EmployeeModelResponse findAll();
 	
 	public EmployeeModelResponse findEmployeeById(int employeeId);
 	
@@ -18,7 +18,7 @@ public interface EmployeeDao {
 
 	public EmployeeModelResponse createEmployee(EmployeeModelRequest modelRequest);
 	
-	 public EmployeeModelResponse deleteEmployee(int employeeId);
+	public EmployeeModelResponse deleteEmployee(int employeeId);
 
 	public boolean updateEmployee(@Valid EmployeeModelRequest modelRequest);
 
