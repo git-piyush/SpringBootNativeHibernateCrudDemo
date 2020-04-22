@@ -20,28 +20,30 @@ import com.springboot.demo.EmployeeModelResponse.EmployeeModelResponse;
 import com.springboot.demo.dao.EmployeeDao;
 import com.springboot.demo.entity.Employee;
 import com.springboot.demo.modelrequest.EmployeeModelRequest;
+import com.springboot.demo.service.EmployeeService;
 import com.springboot.demo.validation.EmployeeValidation;
 
 @RestController
 @RequestMapping("/")
 public class EmployeeRestController {
-
+	
+	private EmployeeService employeeService;
+	
 	private EmployeeDao employeeDao;
-	
-	
-
 	//inject employee dao
 	@Autowired
-	public EmployeeRestController(EmployeeDao employeeDao) {
+	public EmployeeRestController(EmployeeService employeeService, EmployeeDao employeeDao) {
 		super();
+		this.employeeService = employeeService;
 		this.employeeDao = employeeDao;
 	}
+	
 	@GetMapping("/getall")
 	public EmployeeModelResponse findAll() {
-		EmployeeModelResponse modelResponse = employeeDao.findAll();
+		EmployeeModelResponse modelResponse = employeeService.findAll();
 		return modelResponse;
 	}
-	
+
 	@GetMapping("/getemployeebyid")
 	public EmployeeModelResponse findEmployeeById(@Valid @RequestBody EmployeeModelRequest modelRequest){
 		EmployeeValidation employeeValidation = new EmployeeValidation();
@@ -49,7 +51,7 @@ public class EmployeeRestController {
 		boolean getEmployee = employeeValidation.IdInputVal(modelRequest.getEmployeeId());
 		
 		if(getEmployee) {
-			response = employeeDao.findEmployeeById(modelRequest.getEmployeeId());
+			response = employeeService.findEmployeeById(modelRequest.getEmployeeId());
 			if(response.getEmployeeRes()==null) {
 				response.setErrorMsg("Result Not found.");
 				return response;
@@ -68,7 +70,7 @@ public class EmployeeRestController {
 		EmployeeModelResponse modelResponse = new EmployeeModelResponse();
 		boolean getEmployeeList = employeeValidation.RetrieveAddrInputVal(modelRequest);
 		if(getEmployeeList) {
-			modelResponse = employeeDao.findEmployeeByAddress(modelRequest);
+			modelResponse = employeeService.findEmployeeByAddress(modelRequest);
 			 if(modelResponse.getEmpList()==null || modelResponse.getEmpList().isEmpty()) {
 				 modelResponse.setErrorMsg("Result Not Found");
 				 return modelResponse;
@@ -86,7 +88,7 @@ public class EmployeeRestController {
 		EmployeeValidation employeeValidation = new EmployeeValidation();
 		modelResponse = employeeValidation.createEmployeeAddrVal(modelRequest);
 		if(modelResponse.getErrorMsg()==null) {
-			modelResponse = employeeDao.createEmployee(modelRequest);
+			modelResponse = employeeService.createEmployee(modelRequest);
 			modelResponse.setErrorMsg("Sucess");
 			return modelResponse;
 		}
@@ -99,7 +101,7 @@ public class EmployeeRestController {
 		EmployeeValidation employeeValidation = new EmployeeValidation();
 		boolean deleteEmployee = employeeValidation.deleteEmployeeIdVal(modelRequest);
 		if(deleteEmployee) {
-			employeeDeleted = employeeDao.deleteEmployee(modelRequest.getEmployeeId());
+			employeeDeleted = employeeService.deleteEmployee(modelRequest.getEmployeeId());
 			return employeeDeleted;
 		}
 		return employeeDeleted;
@@ -111,15 +113,15 @@ public class EmployeeRestController {
 		EmployeeValidation employeeValidation = new EmployeeValidation();
 		boolean updateEmployee = employeeValidation.IdInputVal(modelRequest.getEmployeeId());
 		if(updateEmployee) {
-			modelResponse = employeeDao.findEmployeeById(modelRequest.getEmployeeId());
+			modelResponse = employeeService.findEmployeeById(modelRequest.getEmployeeId());
 			if(modelRequest.getUpdate().equalsIgnoreCase("Y")) {
 				if(!(modelRequest.getNewFirstName().equals(modelResponse.getEmployeeRes().getFirstName())) ||
 						!(modelRequest.getNewLastName().equals(modelResponse.getEmployeeRes().getLastName())) || 
 							!(modelRequest.getNewEmail().equals(modelResponse.getEmployeeRes().getEmail()))) {
 					
-					boolean empUpdated = employeeDao.updateEmployee(modelRequest);
+					boolean empUpdated = employeeService.updateEmployee(modelRequest);
 					if(empUpdated) {
-						modelResponse = employeeDao.findEmployeeById(modelRequest.getEmployeeId());
+						modelResponse = employeeService.findEmployeeById(modelRequest.getEmployeeId());
 						modelResponse.setErrorMsg("Employee Update To :");
 						return modelResponse;
 					}

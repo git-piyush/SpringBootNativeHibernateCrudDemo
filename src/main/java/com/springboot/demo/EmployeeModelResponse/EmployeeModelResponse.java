@@ -2,8 +2,11 @@ package com.springboot.demo.EmployeeModelResponse;
 
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import com.springboot.demo.entity.Employee;
 
+@Component
 public class EmployeeModelResponse {
 	private String errorMsg;
 	private Employee employeeRes;
